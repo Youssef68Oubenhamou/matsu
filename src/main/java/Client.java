@@ -41,7 +41,7 @@ public class Client {
 
         try {
 
-            output.writeUTF(request);
+            output.writeBytes(request);
 
         }
         catch (IOException i) {

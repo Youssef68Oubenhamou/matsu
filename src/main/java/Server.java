@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.*;
 
+
+
 public class Server {
 
     private static Socket socket = null;
@@ -24,8 +26,12 @@ public class Server {
 
             try {
 
-                m = input.readUTF();
-                System.out.println(m);
+                // TODO: fixing the problem of reading the input by reading it using a byte method!
+                while ((m = input.readLine()) != null) {
+
+                    System.out.println(m);
+
+                }
 
             } catch (IOException i) {
 
