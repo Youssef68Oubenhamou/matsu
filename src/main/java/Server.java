@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 
 public class Server {
@@ -26,10 +27,23 @@ public class Server {
 
             try {
 
-                // TODO: fixing the problem of reading the input by reading it using a byte method!
+                // This while loop is for reading request line by line,
+                // i used this method to avoid losing the data while transmitting it!
                 while ((m = input.readLine()) != null) {
 
-                    System.out.println(m);
+                    // Parsing the HTTP request to seperate Method and Path and HTTP version
+                    Pattern pattern = Pattern.compile("^[A-Z]*\\s+/[a-z]*\\s+[A-Z]*/\\d*[.]\\d$");
+                    Matcher matcher = pattern.matcher(m);
+
+                    int i = 0;
+                    if (matcher.find()) {
+
+                        System.out.println("Found something!");
+                        System.out.println("Method: " + matcher.group().split(" ")[0]);
+                        System.out.println("Path: " + matcher.group().split(" ")[1]);
+                        System.out.println("Version: " + matcher.group().split(" ")[2]);
+
+                    }
 
                 }
 

@@ -17,7 +17,6 @@ public class Client {
             input = new DataInputStream(System.in);
             output = new DataOutputStream(socket.getOutputStream());
 
-
         }
         catch (UnknownHostException u) {
 
@@ -32,7 +31,7 @@ public class Client {
 
         }
 
-        String request = "GET / HTTP/1.1\r\n" +
+        String request = "GET /hello HTTP/1.1\r\n" +
                 "Host: " + addr + "\r\n" +
                 "User-Agent: RawJavaClient/1.0\r\n" +
                 "Accept: text/html\r\n" +
