@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Server {
@@ -25,25 +27,84 @@ public class Server {
 
             String m = "";
 
+            Map<String, String> http_request = new HashMap<>();
+
             try {
 
                 // This while loop is for reading request line by line,
                 // i used this method to avoid losing the data while transmitting it!
                 while ((m = input.readLine()) != null) {
 
-                    // Parsing the HTTP request to seperate Method and Path and HTTP version
-                    Pattern pattern = Pattern.compile("^[A-Z]*\\s+/[a-z]*\\s+[A-Z]*/\\d*[.]\\d$");
-                    Matcher matcher = pattern.matcher(m);
+                    // Parsing the HTTP request line to separate Method and Path and HTTP version
+                    Pattern first_pattern = Pattern.compile("^[A-Z]*\\s+[/[a-z]]*\\s+[A-Z]*/\\d*[.]\\d$");
+                    Matcher first_matcher = first_pattern.matcher(m);
 
-                    int i = 0;
-                    if (matcher.find()) {
+                    if (first_matcher.find()) {
 
                         System.out.println("Found something!");
-                        System.out.println("Method: " + matcher.group().split(" ")[0]);
-                        System.out.println("Path: " + matcher.group().split(" ")[1]);
-                        System.out.println("Version: " + matcher.group().split(" ")[2]);
+                        http_request.put("Method", first_matcher.group().split(" ")[0]);
+                        http_request.put("Path", first_matcher.group().split(" ")[1]);
+                        http_request.put("Version", first_matcher.group().split(" ")[2]);
 
                     }
+
+                    // Parsing the HTTP header!
+                    Pattern second_pattern = Pattern.compile("^[A-Za-z]+:\\s[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$");
+                    Matcher second_matcher = second_pattern.matcher(m);
+
+                    if (second_matcher.find()) {
+
+                        System.out.println("Found something!");
+                        http_request.put(second_matcher.group().split(" ")[0].substring(0,
+                                second_matcher.group().split(" ")[0].length() - 1),
+                                second_matcher.group().split(" ")[1]);
+
+                    }
+
+                    // Parsing User-Agent: RawJavaClient/1.0
+                    Pattern third_pattern = Pattern.compile("^[A-Za-z\\-]+[:]\\s[A-Za-z]+\\/[0-9][.][0-9]$");
+                    Matcher third_matcher = third_pattern.matcher(m);
+
+                    if (third_matcher.find()) {
+
+                        System.out.println("Found something!");
+                        http_request.put(third_matcher.group().split(" ")[0].substring(0,
+                                        third_matcher.group().split(" ")[0].length() - 1),
+                                third_matcher.group().split(" ")[1]);
+
+                    }
+
+                    // Parsing Accept: text/html
+                    Pattern fourth_pattern = Pattern.compile("^[A-Za-z]+[:]\\s[a-z]+\\/[a-z]+$");
+                    Matcher fourth_matcher = fourth_pattern.matcher(m);
+
+                    if (fourth_matcher.find()) {
+
+                        System.out.println("Found Something!");
+                        http_request.put(fourth_matcher.group().split(" ")[0].substring(0,
+                                        fourth_matcher.group().split(" ")[0].length() - 1),
+                                fourth_matcher.group().split(" ")[1]);
+
+                    }
+
+                    // Parsing Connection: close
+                    Pattern fifth_pattern = Pattern.compile("^[A-Za-z]+[:]\\s[A-Za-z]+");
+                    Matcher fifth_matcher = fifth_pattern.matcher(m);
+
+                    if (fifth_matcher.find()) {
+
+                        System.out.println("Found Something!");
+                        http_request.put(fifth_matcher.group().split(" ")[0].substring(0,
+                                        fifth_matcher.group().split(" ")[0].length() - 1),
+                                fifth_matcher.group().split(" ")[1]);
+                        
+                    }
+
+                }
+
+                for (Map.Entry<String, String> http : http_request.entrySet()) {
+
+                    System.out.println(http.getKey() + " -> " + http.getValue());
 
                 }
 
