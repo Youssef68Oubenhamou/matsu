@@ -41,7 +41,6 @@ public class Server {
 
                     if (first_matcher.find()) {
 
-                        System.out.println("Found something!");
                         http_request.put("Method", first_matcher.group().split(" ")[0]);
                         http_request.put("Path", first_matcher.group().split(" ")[1]);
                         http_request.put("Version", first_matcher.group().split(" ")[2]);
@@ -54,7 +53,6 @@ public class Server {
 
                     if (second_matcher.find()) {
 
-                        System.out.println("Found something!");
                         http_request.put(second_matcher.group().split(" ")[0].substring(0,
                                 second_matcher.group().split(" ")[0].length() - 1),
                                 second_matcher.group().split(" ")[1]);
@@ -67,7 +65,6 @@ public class Server {
 
                     if (third_matcher.find()) {
 
-                        System.out.println("Found something!");
                         http_request.put(third_matcher.group().split(" ")[0].substring(0,
                                         third_matcher.group().split(" ")[0].length() - 1),
                                 third_matcher.group().split(" ")[1]);
@@ -80,24 +77,56 @@ public class Server {
 
                     if (fourth_matcher.find()) {
 
-                        System.out.println("Found Something!");
                         http_request.put(fourth_matcher.group().split(" ")[0].substring(0,
                                         fourth_matcher.group().split(" ")[0].length() - 1),
                                 fourth_matcher.group().split(" ")[1]);
 
                     }
 
-                    // Parsing Connection: close
+                    // Parsing Connection: status
                     Pattern fifth_pattern = Pattern.compile("^[A-Za-z]+[:]\\s[A-Za-z]+");
                     Matcher fifth_matcher = fifth_pattern.matcher(m);
 
                     if (fifth_matcher.find()) {
 
-                        System.out.println("Found Something!");
                         http_request.put(fifth_matcher.group().split(" ")[0].substring(0,
                                         fifth_matcher.group().split(" ")[0].length() - 1),
                                 fifth_matcher.group().split(" ")[1]);
+
+                    }
+
+                    // Parsing Content-Type: application/json
+                    Pattern sixth_pattern = Pattern.compile("^[A-Za-z\\-]+[:]\\s[a-z]+\\/[a-z]+$");
+                    Matcher sixth_matcher = sixth_pattern.matcher(m);
+
+                    if (sixth_matcher.find()) {
+
+                        http_request.put(sixth_matcher.group().split(" ")[0].substring(0,
+                                        sixth_matcher.group().split(" ")[0].length() - 1),
+                                sixth_matcher.group().split(" ")[1]);
+
+                    }
+
+                    // Parsing Content-Length: length
+                    Pattern seventh_pattern = Pattern.compile("^[A-Za-z\\-]+[:]\\s[0-9]+$");
+                    Matcher seventh_matcher = seventh_pattern.matcher(m);
+
+                    if (seventh_matcher.find()) {
+
+                        http_request.put(seventh_matcher.group().split(" ")[0].substring(0,
+                                        seventh_matcher.group().split(" ")[0].length() - 1),
+                                seventh_matcher.group().split(" ")[1]);
+
+                    }
+
+                    // Parsing Body: data
+                    Pattern eighth_pattern = Pattern.compile("^[A-Za-z\\,\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
+                    Matcher eighth_matcher = eighth_pattern.matcher(m);
+
+                    if (eighth_matcher.find()) {
                         
+                        http_request.put("Body", eighth_matcher.group());
+
                     }
 
                 }

@@ -31,12 +31,13 @@ public class Client {
 
         }
 
-        String request = "GET /api/hello HTTP/1.1\r\n" +
+        String request = "POST /users HTTP/1.1\r\n" +
                 "Host: " + addr + "\r\n" +
-                "User-Agent: RawJavaClient/1.0\r\n" +
-                "Accept: text/html\r\n" +
-                "Connection: close\r\n" + // Tells the server to close the socket after responding
-                "\r\n";
+                "Content-Type: application/json\r\n" +
+                "Content-Length: 13\r\n" +
+                "\r\n" +
+                "Hello, World! How are you doing??\r\n"
+                ;
 
         try {
 
