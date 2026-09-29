@@ -120,11 +120,11 @@ public class Server {
                     }
 
                     // Parsing Body: data
-                    Pattern eighth_pattern = Pattern.compile("^[A-Za-z\\,\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
+                    Pattern eighth_pattern = Pattern.compile("^[A-Za-z\\{\\}\\,\"\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
                     Matcher eighth_matcher = eighth_pattern.matcher(m);
 
                     if (eighth_matcher.find()) {
-                        
+
                         http_request.put("Body", eighth_matcher.group());
 
                     }
