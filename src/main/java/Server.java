@@ -11,8 +11,11 @@ public class Server {
     private static Socket socket = null;
     private static ServerSocket server_socket = null;
     private static DataInputStream input = null;
+    private static HttpRequest http_request = null;
 
     public Server(int port) {
+
+        this.http_request = new HttpRequest();
 
         try {
 
@@ -27,7 +30,7 @@ public class Server {
 
             String m = "";
 
-            Map<String, String> http_request = new HashMap<>();
+//            Map<String, String> http_request = new HashMap<>();
 
             try {
 
@@ -41,9 +44,9 @@ public class Server {
 
                     if (first_matcher.find()) {
 
-                        http_request.put("Method", first_matcher.group().split(" ")[0]);
-                        http_request.put("Path", first_matcher.group().split(" ")[1]);
-                        http_request.put("Version", first_matcher.group().split(" ")[2]);
+                        this.http_request.setMethod(first_matcher.group().split(" ")[0]);
+                        this.http_request.setPath(first_matcher.group().split(" ")[1]);
+                        this.http_request.setVersion(first_matcher.group().split(" ")[2]);
 
                     }
 
@@ -53,7 +56,7 @@ public class Server {
 
                     if (second_matcher.find()) {
 
-                        http_request.put(second_matcher.group().split(" ")[0].substring(0,
+                        this.http_request.setHeaders(second_matcher.group().split(" ")[0].substring(0,
                                 second_matcher.group().split(" ")[0].length() - 1),
                                 second_matcher.group().split(" ")[1]);
 
@@ -65,7 +68,7 @@ public class Server {
 
                     if (third_matcher.find()) {
 
-                        http_request.put(third_matcher.group().split(" ")[0].substring(0,
+                        this.http_request.setHeaders(third_matcher.group().split(" ")[0].substring(0,
                                         third_matcher.group().split(" ")[0].length() - 1),
                                 third_matcher.group().split(" ")[1]);
 
@@ -77,7 +80,7 @@ public class Server {
 
                     if (fourth_matcher.find()) {
 
-                        http_request.put(fourth_matcher.group().split(" ")[0].substring(0,
+                        this.http_request.setHeaders(fourth_matcher.group().split(" ")[0].substring(0,
                                         fourth_matcher.group().split(" ")[0].length() - 1),
                                 fourth_matcher.group().split(" ")[1]);
 
@@ -89,7 +92,7 @@ public class Server {
 
                     if (fifth_matcher.find()) {
 
-                        http_request.put(fifth_matcher.group().split(" ")[0].substring(0,
+                        this.http_request.setHeaders(fifth_matcher.group().split(" ")[0].substring(0,
                                         fifth_matcher.group().split(" ")[0].length() - 1),
                                 fifth_matcher.group().split(" ")[1]);
 
@@ -101,7 +104,7 @@ public class Server {
 
                     if (sixth_matcher.find()) {
 
-                        http_request.put(sixth_matcher.group().split(" ")[0].substring(0,
+                        this.http_request.setHeaders(sixth_matcher.group().split(" ")[0].substring(0,
                                         sixth_matcher.group().split(" ")[0].length() - 1),
                                 sixth_matcher.group().split(" ")[1]);
 
@@ -113,7 +116,7 @@ public class Server {
 
                     if (seventh_matcher.find()) {
 
-                        http_request.put(seventh_matcher.group().split(" ")[0].substring(0,
+                        this.http_request.setHeaders(seventh_matcher.group().split(" ")[0].substring(0,
                                         seventh_matcher.group().split(" ")[0].length() - 1),
                                 seventh_matcher.group().split(" ")[1]);
 
@@ -125,17 +128,17 @@ public class Server {
 
                     if (eighth_matcher.find()) {
 
-                        http_request.put("Body", eighth_matcher.group());
+                        this.http_request.setBody(eighth_matcher.group());
 
                     }
 
                 }
 
-                for (Map.Entry<String, String> http : http_request.entrySet()) {
-
-                    System.out.println(http.getKey() + " -> " + http.getValue());
-
-                }
+                System.out.println("Method: " + " -> " + this.http_request.getMethod());
+                System.out.println("Path: " + " -> " + this.http_request.getPath());
+                System.out.println("Version: " + " -> " + this.http_request.getVersion());
+                System.out.println(this.http_request.getHeaders());
+                System.out.println("Body: " + this.http_request.getBody());
 
             } catch (IOException i) {
 

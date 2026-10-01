@@ -34,7 +34,7 @@ public class Client {
         String request = "POST /users HTTP/1.1\r\n" +
                 "Host: " + addr + "\r\n" +
                 "Content-Type: application/json\r\n" +
-                "Content-Length: 13\r\n" +
+                "Content-Length: 33\r\n" +
                 "\r\n" +
                 "Hello, World! How are you doing??\r\n"
                 ;

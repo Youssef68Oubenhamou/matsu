@@ -8,14 +8,24 @@ public class HttpRequest {
     private String path;
     private String version;
     private Map<String, String> headers;
-    private long body;
+    private String body;
 
-    HttpRequest(String method, String path, String version, Map<String, String> headers, long body) {
+    HttpRequest() {
+
+        this.method = null;
+        this.path = null;
+        this.version = null;
+        this.headers = new HashMap<>();
+        this.body = null;
+
+    }
+
+    HttpRequest(String method, String path, String version, Map<String, String> headers, String body) {
 
         this.method = method;
         this.path = path;
         this.version = version;
-        this.headers = new HashMap<>();
+        this.headers = headers;
         this.body = body;
 
     }
@@ -59,18 +69,27 @@ public class HttpRequest {
                 .map(header -> header.getKey() + " -> " + header.getValue())
                 .collect(Collectors.joining("\n"));
 
-        }
+    }
+    public void setHeaders(String newKey , String newValue) {
+
+        this.headers.put(newKey, newValue);
 
     }
-    public void setHeaders(String newKey, String newValue) {
 
-        this.headers.;
+    public String getBody() {
+
+        return this.body;
+
+    }
+    public void setBody(String newBody) {
+
+        this.body = newBody;
 
     }
 
     public static void main(String[] args) {
 
-        System.out.println("Hello from Http Request Class !");
+        System.out.println("Hello from the new Class!");
 
     }
 
