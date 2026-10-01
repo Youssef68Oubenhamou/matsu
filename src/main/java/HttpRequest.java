@@ -66,7 +66,7 @@ public class HttpRequest {
     public String getHeaders() {
 
         return this.headers.entrySet().stream()
-                .map(header -> header.getKey() + " -> " + header.getValue())
+                .map(header -> header.getKey() + ": " + header.getValue())
                 .collect(Collectors.joining("\n"));
 
     }

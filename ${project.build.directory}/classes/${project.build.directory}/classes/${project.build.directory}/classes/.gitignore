@@ -1,0 +1,27 @@
+# Compiled files & logs
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+
+# Build systems (Maven & Gradle)
+target/
+.gradle/
+build/
+bin/
+
+# IDE configurations (IntelliJ, Eclipse, VS Code, NetBeans)
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+.vscode/
+nbproject/private/
+
+# OS generated files
+.DS_Store
+Thumbs.db

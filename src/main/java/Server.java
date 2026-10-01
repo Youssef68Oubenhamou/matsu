@@ -30,8 +30,6 @@ public class Server {
 
             String m = "";
 
-//            Map<String, String> http_request = new HashMap<>();
-
             try {
 
                 // This while loop is for reading request line by line,
