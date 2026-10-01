@@ -89,7 +89,7 @@ public class HttpRequest {
 
     public static void main(String[] args) {
 
-        System.out.println("Hello from the new Class!");
+        System.out.println("Hello from the HTTP Response Class!");
 
     }
 
