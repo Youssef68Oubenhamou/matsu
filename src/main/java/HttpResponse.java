@@ -8,23 +8,25 @@ public class HttpResponse {
     private Map<String, String> headers = null;
     private String body = null;
 
+    // Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
     HttpResponse(String body) {
 
-        this.status = new String[2];
+        this.status = new String[3];
         this.headers = new HashMap<>();
         this.body = body;
 
     }
 
-    public String getStatus(){
+    public String getStatus() {
 
         return this.status.toString();
 
     }
-    public void setStatus(String newfStatus, String newsStatus) {
+    public void setStatus(String httpVersion, String statusCode, String reasonPhrase) {
 
-        this.status[0] = newfStatus;
-        this.status[1] = newsStatus;
+        this.status[0] = httpVersion;
+        this.status[1] = statusCode;
+        this.status[2] = reasonPhrase;
 
     }
 
