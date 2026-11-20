@@ -12,6 +12,7 @@ public class Server {
     private static ServerSocket server_socket = null;
     private static DataInputStream input = null;
     private static HttpRequest http_request = null;
+    private static DataOutputStream output = null;
 
     public Server(int port) {
 
@@ -137,6 +138,17 @@ public class Server {
                 System.out.println("Version: " + " -> " + this.http_request.getVersion());
                 System.out.println(this.http_request.getHeaders());
                 System.out.println("Body: " + this.http_request.getBody());
+
+                HttpResponse http_response = new HttpResponse("Hello, This message is from the SERVER to the CLIENT !");
+
+                http_response.setStatus("HTTP/1.1", "200", "OK");
+                http_response.setHeaders("Content-Type", "text/plain");
+                http_response.setHeaders("Content-Length");
+
+                output = new DataOutputStream(socket.getOutputStream());
+
+                output.writeBytes(http_response.getStatus());
+                output.writeBytes(http_response.getHeaders());
 
             } catch (IOException i) {
 

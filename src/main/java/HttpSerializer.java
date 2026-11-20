@@ -1,4 +1,5 @@
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class HttpSerializer {
 
@@ -12,9 +13,9 @@ public class HttpSerializer {
 
     public String processor() {
 
-        byte[] processed_data = http_response.getStatus().getBytes(StandardCharsets.UTF_8);
-        System.out.println(processed_data.toString());
-        return processed_data.toString();
+        http_response.getStatus();
+        byte[] processed_body = http_response.getBody().getBytes(StandardCharsets.UTF_8);
+        return Arrays.toString(processed_body);
 
     }
 

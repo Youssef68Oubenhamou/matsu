@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class HttpResponse {
 
     public String getStatus() {
 
-        return this.status.toString();
+        return Arrays.toString(this.status);
 
     }
     public void setStatus(String httpVersion, String statusCode, String reasonPhrase) {
@@ -33,8 +34,13 @@ public class HttpResponse {
     public String getHeaders() {
 
         return this.headers.entrySet().stream()
-                .map(header -> header.getKey() + ": " + header.getValue())
+                .map(header -> header.getKey() + header.getValue())
                 .collect(Collectors.joining("\n"));
+
+    }
+    public void setHeaders(String newKey) {
+
+        setHeaders(newKey,this.body.length() + "");
 
     }
     public void setHeaders(String newKey, String newValue) {
