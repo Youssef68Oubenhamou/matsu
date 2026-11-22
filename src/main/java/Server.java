@@ -8,15 +8,18 @@ import java.util.Map;
 
 public class Server {
 
-    private static Socket socket = null;
-    private static ServerSocket server_socket = null;
-    private static DataInputStream input = null;
-    private static HttpRequest http_request = null;
-    private static DataOutputStream output = null;
+    private Socket socket = null;
+    private ServerSocket server_socket = null;
+    private DataInputStream input = null;
+    private HttpRequest http_request = null;
+    private DataOutputStream output = null;
+    private HttpResponse http_response;
+    private HttpSerializer http_serializer;
 
-    public Server(int port) {
+    public Server(int port, HttpSerializer http_serializer) {
 
         this.http_request = new HttpRequest();
+        this.http_serializer = http_serializer;
 
         try {
 
@@ -49,8 +52,8 @@ public class Server {
 
                     }
 
-                    // Parsing the HTTP header!
-                    Pattern second_pattern = Pattern.compile("^[A-Za-z]+:\\s[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$");
+                    // Parsing the HTTP Headers!
+                    Pattern second_pattern = Pattern.compile("^[A-Za-z\\-]+:\\s([0-9\\.]+|[A-Za-z0-9\\-/.]+)$");
                     Matcher second_matcher = second_pattern.matcher(m);
 
                     if (second_matcher.find()) {
@@ -61,73 +64,13 @@ public class Server {
 
                     }
 
-                    // Parsing User-Agent: RawJavaClient/1.0
-                    Pattern third_pattern = Pattern.compile("^[A-Za-z\\-]+[:]\\s[A-Za-z]+\\/[0-9][.][0-9]$");
+                    // Parsing Body: data
+                    Pattern third_pattern = Pattern.compile("^[A-Za-z\\{\\}\\,\"\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
                     Matcher third_matcher = third_pattern.matcher(m);
 
                     if (third_matcher.find()) {
 
-                        this.http_request.setHeaders(third_matcher.group().split(" ")[0].substring(0,
-                                        third_matcher.group().split(" ")[0].length() - 1),
-                                third_matcher.group().split(" ")[1]);
-
-                    }
-
-                    // Parsing Accept: text/html
-                    Pattern fourth_pattern = Pattern.compile("^[A-Za-z]+[:]\\s[a-z]+\\/[a-z]+$");
-                    Matcher fourth_matcher = fourth_pattern.matcher(m);
-
-                    if (fourth_matcher.find()) {
-
-                        this.http_request.setHeaders(fourth_matcher.group().split(" ")[0].substring(0,
-                                        fourth_matcher.group().split(" ")[0].length() - 1),
-                                fourth_matcher.group().split(" ")[1]);
-
-                    }
-
-                    // Parsing Connection: status
-                    Pattern fifth_pattern = Pattern.compile("^[A-Za-z]+[:]\\s[A-Za-z]+");
-                    Matcher fifth_matcher = fifth_pattern.matcher(m);
-
-                    if (fifth_matcher.find()) {
-
-                        this.http_request.setHeaders(fifth_matcher.group().split(" ")[0].substring(0,
-                                        fifth_matcher.group().split(" ")[0].length() - 1),
-                                fifth_matcher.group().split(" ")[1]);
-
-                    }
-
-                    // Parsing Content-Type: application/json
-                    Pattern sixth_pattern = Pattern.compile("^[A-Za-z\\-]+[:]\\s[a-z]+\\/[a-z]+$");
-                    Matcher sixth_matcher = sixth_pattern.matcher(m);
-
-                    if (sixth_matcher.find()) {
-
-                        this.http_request.setHeaders(sixth_matcher.group().split(" ")[0].substring(0,
-                                        sixth_matcher.group().split(" ")[0].length() - 1),
-                                sixth_matcher.group().split(" ")[1]);
-
-                    }
-
-                    // Parsing Content-Length: length
-                    Pattern seventh_pattern = Pattern.compile("^[A-Za-z\\-]+[:]\\s[0-9]+$");
-                    Matcher seventh_matcher = seventh_pattern.matcher(m);
-
-                    if (seventh_matcher.find()) {
-
-                        this.http_request.setHeaders(seventh_matcher.group().split(" ")[0].substring(0,
-                                        seventh_matcher.group().split(" ")[0].length() - 1),
-                                seventh_matcher.group().split(" ")[1]);
-
-                    }
-
-                    // Parsing Body: data
-                    Pattern eighth_pattern = Pattern.compile("^[A-Za-z\\{\\}\\,\"\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
-                    Matcher eighth_matcher = eighth_pattern.matcher(m);
-
-                    if (eighth_matcher.find()) {
-
-                        this.http_request.setBody(eighth_matcher.group());
+                        this.http_request.setBody(third_matcher.group());
 
                     }
 
@@ -139,16 +82,13 @@ public class Server {
                 System.out.println(this.http_request.getHeaders());
                 System.out.println("Body: " + this.http_request.getBody());
 
-                HttpResponse http_response = new HttpResponse("Hello, This message is from the SERVER to the CLIENT !");
-
-                http_response.setStatus("HTTP/1.1", "200", "OK");
-                http_response.setHeaders("Content-Type", "text/plain");
-                http_response.setHeaders("Content-Length");
-
                 output = new DataOutputStream(socket.getOutputStream());
 
-                output.writeBytes(http_response.getStatus());
-                output.writeBytes(http_response.getHeaders());
+                http_response = new HttpResponse("Hello, This message is from The SERIALIZER to the SERVER !");
+
+                String response = http_serializer.processor(http_response);
+
+                output.writeBytes(response);
 
             } catch (IOException i) {
 
@@ -158,8 +98,17 @@ public class Server {
 
             System.out.println("Closing connection");
 
-            socket.close();
-            input.close();
+            try {
+
+//                socket.close();
+                input.close();
+                output.close();
+
+            } catch (SocketTimeoutException e) {
+
+                System.out.println(e);
+
+            }
 
         } catch (IOException i) {
 
@@ -173,7 +122,9 @@ public class Server {
 
         System.out.println("Server File...");
 
-        Server server = new Server(5000);
+        HttpSerializer http_serializer = new HttpSerializer();
+
+        Server server = new Server(8000, http_serializer);
 
     }
 

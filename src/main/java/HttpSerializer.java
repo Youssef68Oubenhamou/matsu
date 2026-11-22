@@ -3,19 +3,22 @@ import java.util.Arrays;
 
 public class HttpSerializer {
 
-    private HttpResponse http_response = null;
+    public String processor(HttpResponse http_response) {
 
-    HttpSerializer(HttpResponse http_response) {
+//        String status = http_response.getStatus();
+//        String headers = http_response.getHeaders();
 
-        this.http_response = http_response;
+        http_response.setStatus("HTTP/1.1", "200", "OK");
+        http_response.setHeaders("Content-Type", "text/plain");
+        http_response.setHeaders("Content-Length");
 
-    }
+        byte[] prcsd_status = http_response.getStatus().getBytes(StandardCharsets.UTF_8);
+        byte[] prcsd_headers = http_response.getHeaders().getBytes(StandardCharsets.UTF_8);
+        byte[] prcsd_body = http_response.getBody().getBytes(StandardCharsets.UTF_8);
 
-    public String processor() {
-
-        http_response.getStatus();
-        byte[] processed_body = http_response.getBody().getBytes(StandardCharsets.UTF_8);
-        return Arrays.toString(processed_body);
+        return new String(prcsd_status, StandardCharsets.UTF_8)
+                + new String(prcsd_headers, StandardCharsets.UTF_8)
+                + new String(prcsd_body, StandardCharsets.UTF_8);
 
     }
 

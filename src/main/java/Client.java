@@ -14,7 +14,7 @@ public class Client {
             socket = new Socket(addr , port);
             System.out.println("Connected");
 
-            input = new DataInputStream(System.in);
+            input = new DataInputStream(socket.getInputStream());
             output = new DataOutputStream(socket.getOutputStream());
 
         }
@@ -36,7 +36,7 @@ public class Client {
                 "Content-Type: application/json\r\n" +
                 "Content-Length: 33\r\n" +
                 "\r\n" +
-                "Hello, World! How are you doing??\r\n"
+                "Hello, World! How are you doing??"
                 ;
 
         try {
@@ -53,9 +53,8 @@ public class Client {
         // Closing the connection!
         try {
 
-            input.close();
-            output.close();
-            socket.close();
+            output.flush();
+            socket.shutdownOutput();
 
         } catch (IOException i) {
 
@@ -71,7 +70,7 @@ public class Client {
 
         System.out.println("Let's get started hacking!\n");
 
-        Client client = new Client("127.0.0.1" , 5000);
+        Client client = new Client("127.0.0.1" , 8000);
 
     }
 }
