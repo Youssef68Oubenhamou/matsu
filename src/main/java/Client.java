@@ -1,11 +1,12 @@
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 public class Client {
 
-    private static Socket socket = null;
-    private static DataInputStream input = null;
-    private static DataOutputStream output = null;
+    private Socket socket = null;
+    private DataInputStream input = null;
+    private DataOutputStream output = null;
 
     public Client(String addr, int port) {
 
@@ -84,6 +85,19 @@ public class Client {
         } catch (IOException i) {
 
             System.out.println(i);
+
+        }
+
+        try {
+
+            byte[] response = input.readAllBytes();
+            String res_str = new String(response, StandardCharsets.UTF_8);
+            System.out.println(res_str);
+            socket.close();
+
+        } catch (IOException e) {
+
+            System.out.println(e);
 
         }
 

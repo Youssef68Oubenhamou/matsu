@@ -5,9 +5,6 @@ public class HttpSerializer {
 
     public String processor(HttpResponse http_response) {
 
-//        String status = http_response.getStatus();
-//        String headers = http_response.getHeaders();
-
         http_response.setStatus("HTTP/1.1", "200", "OK");
         http_response.setHeaders("Content-Type", "text/plain");
         http_response.setHeaders("Content-Length");
@@ -16,9 +13,9 @@ public class HttpSerializer {
         byte[] prcsd_headers = http_response.getHeaders().getBytes(StandardCharsets.UTF_8);
         byte[] prcsd_body = http_response.getBody().getBytes(StandardCharsets.UTF_8);
 
-        return new String(prcsd_status, StandardCharsets.UTF_8)
-                + new String(prcsd_headers, StandardCharsets.UTF_8)
-                + new String(prcsd_body, StandardCharsets.UTF_8);
+        return new String(prcsd_status) + "\r\n"
+                + new String(prcsd_headers) + "\r\n"
+                + new String(prcsd_body) + "\r\n";
 
     }
 

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.HashMap;
@@ -69,17 +70,13 @@ public class Server {
                     }
 
                     // Parsing Body: data
-//                    Pattern third_pattern = Pattern.compile("^[A-Za-z\\{\\}\\,\"\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
-//                    Pattern third_pattern = Pattern.compile("^[{\\[A-Za-z0-9\\._\\)\\(\\]\\} /+*&%$#@!;:<>\',\"\r\n-]+$");
                     Pattern third_pattern = Pattern.compile("^(?s)[\\{\\[A-Za-z0-9\\._\\)\\(\\]\\}\\s/+=*\\&%$|#@`~^?!;:<>\\',\\\"\\r\\n-]+$");
                     Matcher third_matcher = third_pattern.matcher(m);
 
                     if (third_matcher.find()) {
 
-                        System.out.println("HaHaHa");
                         System.out.println(third_matcher.group());
                         body += third_matcher.group();
-                        System.out.println("HaHaHa");
                         this.http_request.setBody(body);
                         m = "";
 
@@ -99,7 +96,10 @@ public class Server {
 
                 String response = http_serializer.processor(http_response);
 
-                output.writeBytes(response);
+                byte[] str = response.getBytes();
+                System.out.println(new String(str));
+
+                output.write(str);
 
             } catch (IOException i) {
 
@@ -111,9 +111,9 @@ public class Server {
 
             try {
 
-//                socket.close();
+                output.flush();
                 input.close();
-                output.close();
+                socket.close();
 
             } catch (SocketTimeoutException e) {
 
