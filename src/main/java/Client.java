@@ -31,13 +31,38 @@ public class Client {
 
         }
 
-        String request = "POST /users HTTP/1.1\r\n" +
-                "Host: " + addr + "\r\n" +
-                "Content-Type: application/json\r\n" +
-                "Content-Length: 33\r\n" +
+//        String request = "POST /users HTTP/1.1\r\n" +
+//                "Host: " + addr + "\r\n" +
+//                "Content-Type: application/json\r\n" +
+//                "Content-Length: 33\r\n" +
+//                "\r\n" +
+//                "{\r\n" +
+//                "  \"id\": 1042,\r\n" +
+//                "  \"active\": true,\r\n" +
+//                "  \"tags\": [\"admin\", \"dev-team\"],\r\n" +
+//                "  \"price\": -19.99\r\n" +
+//                "}";
+
+//        String request = "POST /login HTTP/1.1\r\n" +
+//                "Host: example.com\r\n" +
+//                "Content-Type: application/x-www-form-urlencoded\r\n" +
+//                "\r\n" +
+//                "user=john_doe%40mail.com&password=P@ssw0rd!#&remember=1";
+
+        String request = "POST /api/xml HTTP/1.1\r\n" +
+                "Host: example.com\r\n" +
+                "Content-Type: application/xml\r\n" +
                 "\r\n" +
-                "Hello, World! How are you doing??"
-                ;
+                "<user id=\"1\"><name>Alice &amp; Bob</name></user>";
+
+//        String request = "POST /users HTTP/1.1\r\n" +
+//                "Host: " + addr + "\r\n" +
+//                "Content-Type: application/json\r\n" +
+//                "Content-Length: 33\r\n" +
+//                "\r\n" +
+//                "{\r\n" +
+//                "\"payload\": \"Hello Friend !\"\r\n"+
+//                "}";
 
         try {
 

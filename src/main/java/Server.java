@@ -34,6 +34,8 @@ public class Server {
 
             String m = "";
 
+            String body = "";
+
             try {
 
                 // This while loop is for reading request line by line,
@@ -49,6 +51,7 @@ public class Server {
                         this.http_request.setMethod(first_matcher.group().split(" ")[0]);
                         this.http_request.setPath(first_matcher.group().split(" ")[1]);
                         this.http_request.setVersion(first_matcher.group().split(" ")[2]);
+                        m = "";
 
                     }
 
@@ -61,16 +64,24 @@ public class Server {
                         this.http_request.setHeaders(second_matcher.group().split(" ")[0].substring(0,
                                 second_matcher.group().split(" ")[0].length() - 1),
                                 second_matcher.group().split(" ")[1]);
+                        m = "";
 
                     }
 
                     // Parsing Body: data
-                    Pattern third_pattern = Pattern.compile("^[A-Za-z\\{\\}\\,\"\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
+//                    Pattern third_pattern = Pattern.compile("^[A-Za-z\\{\\}\\,\"\\:\\?\\.\\!\\/\\-\\_\\;\\\\\\s]+$");
+//                    Pattern third_pattern = Pattern.compile("^[{\\[A-Za-z0-9\\._\\)\\(\\]\\} /+*&%$#@!;:<>\',\"\r\n-]+$");
+                    Pattern third_pattern = Pattern.compile("^(?s)[\\{\\[A-Za-z0-9\\._\\)\\(\\]\\}\\s/+=*\\&%$|#@`~^?!;:<>\\',\\\"\\r\\n-]+$");
                     Matcher third_matcher = third_pattern.matcher(m);
 
                     if (third_matcher.find()) {
 
-                        this.http_request.setBody(third_matcher.group());
+                        System.out.println("HaHaHa");
+                        System.out.println(third_matcher.group());
+                        body += third_matcher.group();
+                        System.out.println("HaHaHa");
+                        this.http_request.setBody(body);
+                        m = "";
 
                     }
 
