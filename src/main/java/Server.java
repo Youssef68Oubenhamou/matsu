@@ -92,14 +92,13 @@ public class Server {
 
                 output = new DataOutputStream(socket.getOutputStream());
 
-                http_response = new HttpResponse("Hello, This message is from The SERIALIZER to the SERVER !");
+                http_response = new HttpResponse();
 
-                String response = http_serializer.processor(http_response);
+                byte[] response = http_serializer.processor(http_response);
 
-                byte[] str = response.getBytes();
-                System.out.println(new String(str));
+                System.out.println(new String(response));
 
-                output.write(str);
+                output.write(response);
 
             } catch (IOException i) {
 

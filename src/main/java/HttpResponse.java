@@ -1,26 +1,36 @@
+import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpResponse {
 
-    private String[] status = null;
-    private Map<String, String> headers = null;
-    private String body = null;
+    private String[] status;
+    private Map<String, String> headers;
+    private String body;
 
     // Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-    HttpResponse(String body) {
+    public HttpResponse() {
 
-        this.status = new String[3];
-        this.headers = new HashMap<>();
-        this.body = body;
+        this.body = "Hello World, This is the response !";
+        this.status = new String[] {"HTTP/1.1", "200", "OK"};
+        this.headers = new HashMap<>(Map.of(
+            "Server", "Apache",
+            "Date", "" + ZonedDateTime.now(ZoneId.of("GMT")).format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)),
+            "Content-Type", "text/plain",
+            "Content-Length", "" + this.body.getBytes(StandardCharsets.UTF_8).length
+        ));
 
     }
 
-    public String getStatus() {
+    public String[] getStatus() {
 
-        return Arrays.toString(this.status);
+        return this.status;
 
     }
     public void setStatus(String httpVersion, String statusCode, String reasonPhrase) {
@@ -31,16 +41,14 @@ public class HttpResponse {
 
     }
 
-    public String getHeaders() {
+    public Map<String, String> getHeaders() {
 
-        return this.headers.entrySet().stream()
-                .map(header -> header.getKey() + header.getValue())
-                .collect(Collectors.joining("\n"));
+        return this.headers;
 
     }
     public void setHeaders(String newKey) {
 
-        setHeaders(newKey,this.body.length() + "");
+        setHeaders(newKey,this.body.getBytes(StandardCharsets.UTF_8).length + "");
 
     }
     public void setHeaders(String newKey, String newValue) {

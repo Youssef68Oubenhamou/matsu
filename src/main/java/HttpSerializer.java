@@ -1,21 +1,22 @@
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class HttpSerializer {
 
-    public String processor(HttpResponse http_response) {
+    public byte[] processor(HttpResponse http_response) {
 
-        http_response.setStatus("HTTP/1.1", "200", "OK");
-        http_response.setHeaders("Content-Type", "text/plain");
-        http_response.setHeaders("Content-Length");
+        byte[] processed_response = new String(
+            Arrays.stream(http_response.getStatus())
+                .collect(Collectors.joining(" ")) + "\r\n"
+            + http_response.getHeaders().entrySet().stream()
+                    .map(header -> header.getKey() +": " + header.getValue())
+                    .collect(Collectors.joining("\r\n")) + "\r\n"
+            + "\r\n"
+            + http_response.getBody()
+        ).getBytes(StandardCharsets.UTF_8);
 
-        byte[] prcsd_status = http_response.getStatus().getBytes(StandardCharsets.UTF_8);
-        byte[] prcsd_headers = http_response.getHeaders().getBytes(StandardCharsets.UTF_8);
-        byte[] prcsd_body = http_response.getBody().getBytes(StandardCharsets.UTF_8);
-
-        return new String(prcsd_status) + "\r\n"
-                + new String(prcsd_headers) + "\r\n"
-                + new String(prcsd_body) + "\r\n";
+        return processed_response;
 
     }
 
