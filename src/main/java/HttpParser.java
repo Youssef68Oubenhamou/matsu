@@ -50,10 +50,6 @@ public class HttpParser {
 
     public String headers_parser() {
 
-//        Map<String, String> headers = new HashMap<>();
-
-        System.out.println(this.in.length);
-
         int j;
         for (j = 1; j < this.in.length; j++) {
 
@@ -63,7 +59,6 @@ public class HttpParser {
 
             } else {
 
-//                System.out.println(this.in[j].split(": ")[0] + "====" + this.in[j].split(": ")[1]);
                 this.http_request.setHeaders(this.in[j].split(": ")[0], this.in[j].split(": ")[1]);
 
             }
@@ -80,46 +75,22 @@ public class HttpParser {
 
     }
 
-//        while ((m = input.readLine()) != null) {
-//
-//            Pattern first_pattern = Pattern.compile("^[A-Z]*\\s+[/[a-z]]*\\s+[A-Z]*/\\d*[.]\\d$");
-//            Matcher first_matcher = first_pattern.matcher(m);
-//
-//            if (first_matcher.find()) {
-//
-//                this.http_request.setMethod(first_matcher.group().split(" ")[0]);
-//                this.http_request.setPath(first_matcher.group().split(" ")[1]);
-//                this.http_request.setVersion(first_matcher.group().split(" ")[2]);
-//                m = "";
-//
-//            }
-//
-//            Pattern second_pattern = Pattern.compile("^[A-Za-z\\-]+:\\s([0-9\\.]+|[A-Za-z0-9\\-/.]+)$");
-//            Matcher second_matcher = second_pattern.matcher(m);
-//
-//            if (second_matcher.find()) {
-//
-//                this.http_request.setHeaders(second_matcher.group().split(" ")[0].substring(0,
-//                                second_matcher.group().split(" ")[0].length() - 1),
-//                        second_matcher.group().split(" ")[1]);
-//                m = "";
-//
-//            }
-//
-//            Pattern third_pattern = Pattern.compile("^(?s)[\\{\\[A-Za-z0-9\\._\\)\\(\\]\\}\\s/+=*\\&%$|#@`~^?!;:<>\\',\\\"\\r\\n-]+$");
-//            Matcher third_matcher = third_pattern.matcher(m);
-//
-//            if (third_matcher.find()) {
-//
-//                System.out.println(third_matcher.group());
-//                body += third_matcher.group();
-//                this.http_request.setBody(body);
-//                m = "";
-//
-//            }
-//
-//        }
+    public String body_parser() {
 
+        String body = "";
+
+        int z;
+        for (z = Arrays.asList(this.in).indexOf("") + 1; z < this.in.length; z++) {
+
+            body += this.in[z];
+
+        }
+
+        this.http_request.setBody(body);
+
+        return this.http_request.getBody();
+
+    }
 
     public static void main(String[] args) {
 

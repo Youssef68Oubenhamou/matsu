@@ -36,6 +36,8 @@ public class Server {
 
             System.out.println(http_parser.headers_parser());
 
+            System.out.println(http_parser.body_parser());
+
 //            try {
 //
 //                System.out.println("Method: " + " -> " + this.http_request.getMethod());
