@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 
 public class HttpSerializer {
 
-    public byte[] processor(HttpResponse http_response) {
+    public byte[] serializer(HttpResponse http_response) {
 
         byte[] processed_response = new String(
             Arrays.stream(http_response.getStatus())
