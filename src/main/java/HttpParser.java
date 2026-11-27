@@ -55,14 +55,19 @@ public class HttpParser {
         System.out.println(this.in.length);
 
         int j;
-        for (j = 0; j < this.in.length; j++) {
+        for (j = 1; j < this.in.length; j++) {
 
-            if (in[j].equals("\r\n\r\n")) {
+            if (in[j].isBlank()) {
 
                 break;
 
+            } else {
+
+//                System.out.println(this.in[j].split(": ")[0] + "====" + this.in[j].split(": ")[1]);
+                this.http_request.setHeaders(this.in[j].split(": ")[0], this.in[j].split(": ")[1]);
+
             }
-            this.http_request.setHeaders(this.in[j].split(": ")[0], this.in[j].split(": ")[1]);
+
             if (this.in[j].split(": ")[0].equals("Content-Length")) {
 
                 this.content_length = Integer.parseInt(in[j].split(": ")[1]);
